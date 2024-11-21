@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import { motion } from "framer-motion";
 import SearchForm from "./components/SearchForm";
 import MovieList from "./components/MovieList";
+
+const backGround = styled.div`
+  
+`
 
 export const App = () => {
   const [movies, setMovies] = useState(null);

@@ -1,5 +1,28 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+
+// スタイル 
+const FormWrapper = styled(motion.div)`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 400px;
+    margin: auto;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+`;
+
+const StyledFormControl = styled(FormControl)`
+    && {
+        width: 100%;
+    }
+`;
+
 
 const SearchForm = ({ onSearch }) => {
     const [genres, setGenres] = useState([]);
@@ -27,55 +50,74 @@ const SearchForm = ({ onSearch }) => {
         });
     };
 
+
     return (
-        <form onSubmit={handleSubmit}>
+        <FormWrapper
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+        >
             {/* ジャンル選択 */}
-            <label>
-                ジャンル:
-                <select value={selectedGenre} onChange={(e) => setSelectedGenre(e.target.value)}>
-                    <option value="">すべて</option>
+            <StyledFormControl>
+                <InputLabel id="genre-label">ジャンル</InputLabel>
+                <Select
+                    labelId="genre-label"
+                    value={selectedGenre}
+                    onChange={(e) => setSelectedGenre(e.target.value)}
+                >
+                    <MenuItem value="">すべて</MenuItem>
                     {genres.map((genre) => (
-                        <option key={genre.id} value={genre.id}>
+                        <MenuItem key={genre.id} value={genre.id}>
                             {genre.name}
-                        </option>
+                        </MenuItem>
                     ))}
-                </select>
-            </label>
+                </Select>
+            </StyledFormControl>
 
             {/* 年選択 */}
-            <label>
-                年:
-                <select value={selectedYear} onChange={(e) => setSelectedYear(e.target.value)}>
-                    <option value="">すべて</option>
+            <StyledFormControl>
+                <InputLabel id="year-label">年</InputLabel>
+                <Select
+                    labelId="year-label"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                >
+                    <MenuItem value="">すべて</MenuItem>
                     {Array.from({ length: 30 }, (_, i) => {
                         const year = new Date().getFullYear() - i;
                         return (
-                            <option key={year} value={year}>
+                            <MenuItem key={year} value={year}>
                                 {year}
-                            </option>
+                            </MenuItem>
                         );
                     })}
-                </select>
-            </label>
+                </Select>
+            </StyledFormControl>
 
             {/* 評価選択 */}
-            <label>
-                評価:
-                <select value={selectedRating} onChange={(e) => setSelectedRating(e.target.value)}>
-                    <option value="">すべて</option>
+            <StyledFormControl>
+                <InputLabel id="rating-label">評価</InputLabel>
+                <Select
+                    labelId="rating-label"
+                    value={selectedRating}
+                    onChange={(e) => setSelectedRating(e.target.value)}
+                >
+                    <MenuItem value="">すべて</MenuItem>
                     {[...Array(10)].map((_, i) => {
                         const rating = (i + 1) / 2;
                         return (
-                            <option key={rating} value={rating}>
+                            <MenuItem key={rating} value={rating}>
                                 {rating} 以上
-                            </option>
+                            </MenuItem>
                         );
                     })}
-                </select>
-            </label>
+                </Select>
+            </StyledFormControl>
 
-            <button type="submit">検索</button>
-        </form>
+            <Button variant="contained" color="primary" onClick={handleSubmit}>
+                検索
+            </Button>
+        </FormWrapper>
     );
 };
 
