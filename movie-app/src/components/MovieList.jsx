@@ -11,7 +11,6 @@ const MovieGrid = styled.div`
 `;
 
 const MovieCard = styled(motion.div)`
-  background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
@@ -29,21 +28,7 @@ const MovieCard = styled(motion.div)`
 
   h2 {
     font-size: 1.2rem;
-    margin: 20px 0;
-    position: relative;
-    padding: 0.6em;
-    background: #e0edff;
-
-    &:before {
-      position: absolute;
-      content: "";
-      top: 100%;
-      left: 30px;
-      border: 15px solid transparent;
-      border-top: 15px solid #e0edff;
-      width: 0;
-      height: 0;
-    }
+    margin: 10px 0;
   }
 
   p {
@@ -59,22 +44,6 @@ const cardVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
 };
 
-const MovieTitle = styled.h2`
-    position: relative;
-    padding: 0.6em;
-    background: #e0edff;
-
-    &:before {
-    position: absolute;
-    content: '';
-    top: 100%;
-    left: 30px;
-    border: 15px solid transparent;
-    border-top: 15px solid #e0edff;
-    width: 0;
-    height: 0;
-    }
-`
 
 const MovieList = ({ movies }) => {
   return (
@@ -87,13 +56,12 @@ const MovieList = ({ movies }) => {
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
         >
-          <h2>{movie.title}</h2>
           <img
             src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}
             alt={movie.title}
           />
-
-          <p>{movie.overview}</p>
+          <h2>{movie.title}</h2>
+          {/* <p>{movie.overview}</p> */}
         </MovieCard>
       ))}
     </MovieGrid>
