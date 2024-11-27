@@ -10,20 +10,28 @@ const MovieGrid = styled.div`
   padding: 20px ;
 `;
 
+// デザインここから------------------------------------
 const MovieCard = styled(motion.div)`
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 15px;
+  box-shadow: 5px 4px 6px rgba(0, 0, 0, 0.5);
+  background-color: #726113;
   overflow: hidden;
   text-align: center;
   transition: transform 0.3s ease;
+  margin: 10px 0;
 
   &:hover {
     transform: translateY(-10px);
   }
 
   img {
+    transition: 1s all;
     width: 100%;
     height: auto;
+  }
+  img:hover {
+    transform: scale(1.06, 1.06);
+    transition: 1s all;
   }
 
   h2 {
@@ -37,6 +45,7 @@ const MovieCard = styled(motion.div)`
     color: #555;
   }
 `;
+// デザインここまで------------------------------------
 
 // アニメーション設定
 const cardVariants = {

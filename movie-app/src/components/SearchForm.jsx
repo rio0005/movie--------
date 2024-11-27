@@ -11,7 +11,7 @@ const FormWrapper = styled(motion.div)`
     gap: 20px;
     width: 400px;
     margin: auto;
-    padding: 20px;
+    padding: 30px;
     background: #f9f9f9;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -31,8 +31,7 @@ const SearchForm = ({ onSearch }) => {
   const [selectedYear, setSelectedYear] = useState(""); // 公開年数
   const [selectedRating, setSelectedRating] = useState(""); // 評価
   const [selectedRuntime, setSelectedRuntime] = useState(""); // 上映時間
-  const [actor, setActor] = useState(""); // 俳優名
-  const [actorSuggestions, setActorSuggestions] = useState([]); // 予測候補
+
 
   useEffect(() => {
     // ジャンルをAPIから取得
@@ -46,34 +45,6 @@ const SearchForm = ({ onSearch }) => {
       });
   }, []);
 
-  // 俳優予測APIを呼び出す
-  const fetchActorSuggestions = async (query) => {
-    if (!query) {
-      setActorSuggestions([]);
-      return;
-    }
-
-    try {
-      const response = await axios.get(
-        `http://localhost/api/actors?query=${query}`
-      );
-      setActorSuggestions(response.data.results);
-    } catch (error) {
-      console.error("俳優の予測候補の取得に失敗しました:", error);
-    }
-  };
-
-  const handleActorChange = (e) => {
-    const value = e.target.value;
-    setActor(value);
-    fetchActorSuggestions(value); // 入力値に基づいて予測候補を取得
-  };
-
-  const handleActorSelect = (actorName) => {
-    setActor(actorName);
-    setActorSuggestions([]); // 候補リストをクリア
-  };
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -82,7 +53,6 @@ const SearchForm = ({ onSearch }) => {
       year: selectedYear,
       rating: selectedRating,
       runtime: selectedRuntime,
-      actor, // 俳優名を追加
     });
   };
 
@@ -162,37 +132,6 @@ const SearchForm = ({ onSearch }) => {
           <MenuItem value="medium">100〜150時間</MenuItem>
           <MenuItem value="long">150時間以上</MenuItem>
         </Select>
-      </StyledFormControl>
-
-       {/* 出演俳優検索 */}
-      <StyledFormControl>
-        出演俳優:
-        <input
-          type="text"
-          value={actor}
-          onChange={handleActorChange}
-          placeholder="俳優名を入力"
-        />
-        {actorSuggestions.length > 0 && (
-          <ul
-            style={{
-              border: "1px solid #ccc",
-              padding: "10px",
-              margin: 0,
-              listStyle: "none",
-            }}
-          >
-            {actorSuggestions.map((suggestion) => (
-              <li
-                key={suggestion.id}
-                style={{ cursor: "pointer", padding: "5px 0" }}
-                onClick={() => handleActorSelect(suggestion.name)}
-              >
-                {suggestion.name}
-              </li>
-            ))}
-          </ul>
-        )}
       </StyledFormControl>
 
       <Button variant="contained" color="primary" onClick={handleSubmit}>
