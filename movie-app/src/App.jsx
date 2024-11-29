@@ -93,12 +93,12 @@ export const App = () => {
 
   return (
     <>
-      <GlobalStyle />
-      <BackGround>
-        <Title>ムービーデータベース</Title>
-        <SearchForm onSearch={handleSearch} />
-        {movies && <MovieList movies={movies} />}
-      </BackGround>
+        <GlobalStyle />
+        <BackGround>
+          <Title>ムービーデータベース</Title>
+          <SearchForm onSearch={handleSearch} />
+          {movies && <MovieList movies={movies} />}
+        </BackGround>
     </>
   );
 };

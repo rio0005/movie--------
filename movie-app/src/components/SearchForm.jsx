@@ -109,7 +109,7 @@ const SearchForm = ({ onSearch }) => {
         >
           <MenuItem value="">すべて</MenuItem>
           {[...Array(10)].map((_, i) => {
-            const rating = (i + 1) / 2;
+            const rating = (i + 1) ;
             return (
               <MenuItem key={rating} value={rating}>
                 {rating} 以上
