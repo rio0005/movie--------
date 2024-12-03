@@ -54,7 +54,7 @@ const cardVariants = {
 };
 
 
-const MovieList = ({ movies }) => {
+const MovieList = ({ movies,onMovieClick }) => {
   return (
     <MovieGrid>
       {movies.results.map((movie) => (
@@ -64,6 +64,7 @@ const MovieList = ({ movies }) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
+          onClick={() => onMovieClick(movie)} // クリック時に選択映画を設定
         >
           <img
             src={`https://image.tmdb.org/t/p/w342/${movie.poster_path}`}

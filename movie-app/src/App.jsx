@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import styled,{ createGlobalStyle } from "styled-components";
-import { motion } from "framer-motion";
+import { motion,AnimatePresence } from "framer-motion";
 import SearchForm from "./components/SearchForm";
 import MovieList from "./components/MovieList";
 
@@ -80,25 +80,101 @@ const Title = styled.h1`
 
 export const App = () => {
   const [movies, setMovies] = useState(null);
+  const [selectedMovie, setSelectedMovie] = useState(null); // 選択された映画
 
   const handleSearch = async (params) => {
-    try{
-      const response = await axios.get("http://localhost:8000/api/movies", { params });
+    try {
+      const response = await axios.get("http://localhost:8000/api/movies", {
+        params,
+      });
       setMovies(response.data);
     } catch (error) {
-      console.error("映画データの取得に失敗しました:",error);
+      console.error("映画データの取得に失敗しました:", error);
     }
   };
 
+  const closeModal = () => {
+    setSelectedMovie(null);
+  };
 
   return (
     <>
-        <GlobalStyle />
-        <BackGround>
-          <Title>ムービーデータベース</Title>
-          <SearchForm onSearch={handleSearch} />
-          {movies && <MovieList movies={movies} />}
-        </BackGround>
+      <GlobalStyle />
+      <BackGround>
+        <Title>ムービーデータベース</Title>
+        <SearchForm onSearch={handleSearch} />
+        {movies && (
+          <MovieList
+            movies={movies}
+            onMovieClick={(movie) => setSelectedMovie(movie)}
+          />
+        )}
+
+        <AnimatePresence>
+          {selectedMovie && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100vw",
+                height: "100vh",
+                background: "rgba(0, 0, 0, 0.5)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 1000,
+              }}
+              onClick={closeModal}
+            >
+              <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+                style={{
+                  color: "#000000",
+                  background: "#e2f4ff",
+                  borderRadius: "30px",
+                  padding: "40px",
+                  textAlign: "center",
+                  lineHeight: "30px",
+                  maxWidth: "600px",
+                  width: "90%",
+                  height: "90%",
+                  position: "relative",
+                }}
+                onClick={(e) => e.stopPropagation()} // モーダル内クリックで閉じないようにする
+              >
+                <button
+                  onClick={closeModal}
+                  style={{
+                    position: "absolute",
+                    top: "10px",
+                    right: "10px",
+                    background: "transparent",
+                    border: "none",
+                    fontSize: "1.5rem",
+                    cursor: "pointer",
+                  }}
+                >
+                  &times;
+                </button>
+                <img
+                  src={`https://image.tmdb.org/t/p/w342/${selectedMovie.poster_path}`}
+                  alt={selectedMovie.title}
+                  style={{ width: "50%", height: "50%", borderRadius: "8px" }}
+                />
+                <h2>{selectedMovie.title}</h2>
+                <p className="overview">{selectedMovie.overview}</p>
+                <p>リリース日: {selectedMovie.release_date}</p>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </BackGround>
     </>
   );
 };
