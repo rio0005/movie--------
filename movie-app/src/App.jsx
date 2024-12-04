@@ -61,8 +61,13 @@ const BackGround = styled.div`
   background-position: 0 0, 50px 50px, 50px 0, 0 50px, 50px 0, 100px 50px, 0 0,
     50px 50px, 0 0, 0 0;
   background-size: 100px 100px;
-  /* background: linear-gradient(140deg, #006666, #336633, #003366); */
   color: #fff;
+
+  /* カードモーダル内 スタイル */
+  .overview {
+    margin: 20px 0 20px 0;
+  }
+
 `;
 // 背景デザインここまで-----------------------------------------------
 
@@ -93,6 +98,7 @@ export const App = () => {
     }
   };
 
+  // モーダルを閉じる関数
   const closeModal = () => {
     setSelectedMovie(null);
   };
@@ -136,14 +142,15 @@ export const App = () => {
                 exit={{ scale: 0.8 }}
                 style={{
                   color: "#000000",
-                  background: "#e2f4ff",
+                  background: "#cccccc",
                   borderRadius: "30px",
                   padding: "40px",
                   textAlign: "center",
                   lineHeight: "30px",
-                  maxWidth: "600px",
+                  maxWidth: "550px",
                   width: "90%",
-                  height: "90%",
+                  maxHeight: "90vh",
+                  overflowY: "auto",
                   position: "relative",
                 }}
                 onClick={(e) => e.stopPropagation()} // モーダル内クリックで閉じないようにする
@@ -169,7 +176,9 @@ export const App = () => {
                 />
                 <h2>{selectedMovie.title}</h2>
                 <p className="overview">{selectedMovie.overview}</p>
-                <p>リリース日: {selectedMovie.release_date}</p>
+                <p>上映日: {selectedMovie.release_date}</p>
+                <p>評価：{selectedMovie.vote_average} / 10</p>
+                <p>投票数：{selectedMovie.vote_count}人</p>
               </motion.div>
             </motion.div>
           )}

@@ -71,7 +71,6 @@ const MovieList = ({ movies,onMovieClick }) => {
             alt={movie.title}
           />
           <h2>{movie.title}</h2>
-          {/* <p>{movie.overview}</p> */}
         </MovieCard>
       ))}
     </MovieGrid>
