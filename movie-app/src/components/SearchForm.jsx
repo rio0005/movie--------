@@ -29,8 +29,8 @@ const SearchForm = ({ onSearch }) => {
   const [genres, setGenres] = useState([]);
   const [selectedGenre, setSelectedGenre] = useState(""); // ジャンル
   const [selectedYear, setSelectedYear] = useState(""); // 公開年数
-  const [selectedRating, setSelectedRating] = useState(""); // 評価
   const [selectedRuntime, setSelectedRuntime] = useState(""); // 上映時間
+
 
 
   useEffect(() => {
@@ -51,7 +51,6 @@ const SearchForm = ({ onSearch }) => {
     onSearch({
       genre: selectedGenre,
       year: selectedYear,
-      rating: selectedRating,
       runtime: selectedRuntime,
     });
   };
@@ -99,25 +98,7 @@ const SearchForm = ({ onSearch }) => {
         </Select>
       </StyledFormControl>
 
-      {/* 評価選択 */}
-      <StyledFormControl>
-        <InputLabel id="rating-label">評価</InputLabel>
-        <Select
-          labelId="rating-label"
-          value={selectedRating}
-          onChange={(e) => setSelectedRating(e.target.value)}
-        >
-          <MenuItem value="">すべて</MenuItem>
-          {[...Array(10)].map((_, i) => {
-            const rating = (i + 1) ;
-            return (
-              <MenuItem key={rating} value={rating}>
-                {rating} 以上
-              </MenuItem>
-            );
-          })}
-        </Select>
-      </StyledFormControl>
+      {/*俳優・監督選択 */}
 
       {/* 上映時間選択 */}
       <StyledFormControl>
