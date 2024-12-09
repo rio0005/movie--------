@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { FormControl, InputLabel, Select, MenuItem, Button } from "@mui/material";
+import { FormControl, InputLabel, Select, MenuItem, Button, TextField } from "@mui/material";
 
 // スタイル ------------------------------------------
 const FormWrapper = styled(motion.div)`
+    color: black;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -30,8 +31,9 @@ const SearchForm = ({ onSearch }) => {
   const [selectedGenre, setSelectedGenre] = useState(""); // ジャンル
   const [selectedYear, setSelectedYear] = useState(""); // 公開年数
   const [selectedRuntime, setSelectedRuntime] = useState(""); // 上映時間
-
-
+  const [selectedPerson, setSelectedPerson] = useState(""); // 俳優・監督検索
+  const [personSuggestions, setPersonSuggestions] = useState([]); // サジェスト候補
+  const [searchQuery, setSearchQuery] = useState(""); // 検索クエリ
 
   useEffect(() => {
     // ジャンルをAPIから取得
@@ -45,6 +47,34 @@ const SearchForm = ({ onSearch }) => {
       });
   }, []);
 
+    const handlePersonSearch = (query) => {
+      setSearchQuery(query);
+      if (query.trim() === "") {
+        setPersonSuggestions([]);
+        return;
+      }
+
+      // TMDb APIで俳優・監督検索
+      axios
+        .get(`https://api.themoviedb.org/3/search/person`, {
+          params: {
+            api_key: "338014730556f227e32d631536c4b9cf",
+            query,
+          },
+        })
+        .then((response) => {
+          setPersonSuggestions(response.data.results);
+        })
+        .catch((error) => {
+          console.error("俳優・監督の検索に失敗しました:", error);
+        });
+    };
+
+      const handlePersonSelect = (personName) => {
+        setSelectedPerson(personName);
+        setSearchQuery(personName);
+        setPersonSuggestions([]); // サジェストをクリア
+      };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -52,6 +82,7 @@ const SearchForm = ({ onSearch }) => {
       genre: selectedGenre,
       year: selectedYear,
       runtime: selectedRuntime,
+      person: selectedPerson,
     });
   };
 
@@ -98,8 +129,6 @@ const SearchForm = ({ onSearch }) => {
         </Select>
       </StyledFormControl>
 
-      {/*俳優・監督選択 */}
-
       {/* 上映時間選択 */}
       <StyledFormControl>
         <InputLabel id="runtime-label">上映時間</InputLabel>
@@ -113,6 +142,28 @@ const SearchForm = ({ onSearch }) => {
           <MenuItem value="medium">100〜150時間</MenuItem>
           <MenuItem value="long">150時間以上</MenuItem>
         </Select>
+      </StyledFormControl>
+
+      {/*俳優・監督選択 */}
+      <StyledFormControl>
+        <TextField
+          label="俳優・監督 ※苗字と名前にスペースを入れる"
+          value={searchQuery}
+          onChange={(e) => handlePersonSearch(e.target.value)}
+        />
+        {personSuggestions.length > 0 && (
+          <ul>
+            {personSuggestions.map((person) => (
+              <li
+                key={person.id}
+                onClick={() => handlePersonSelect(person.name)}
+                style={{ cursor: "pointer" }}
+              >
+                {person.name}
+              </li>
+            ))}
+          </ul>
+        )}
       </StyledFormControl>
 
       <Button variant="contained" color="primary" onClick={handleSubmit}>
